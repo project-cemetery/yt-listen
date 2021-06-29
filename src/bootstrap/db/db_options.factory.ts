@@ -1,9 +1,10 @@
-import { Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { join } from 'path';
 
 import { Configuration } from '../config/config';
 
+@Injectable()
 export class DbOptionsFactory implements TypeOrmOptionsFactory {
   public constructor(private readonly config: Configuration) {}
 
