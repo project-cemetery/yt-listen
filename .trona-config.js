@@ -1,18 +1,16 @@
 const { Client } = require('pg');
+const { resolve } = require('path');
+const { CommonConfiguration } = require('@solid-soda/config');
 
-const isProd = process.env.NODE_ENV !== 'production';
-
-if (!isProd) {
-  require('dotenv').config();
-}
+const config = new CommonConfiguration(resolve(__dirname, './.env'));
 
 const client = new Client({
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-  host: process.env.DB_HOST,
-  ssl: isProd
+  user: config.getStringOrThrow('DB_USER'),
+  database: config.getStringOrThrow('DB_NAME'),
+  password: config.getStringOrThrow('DB_PASSWORD'),
+  port: config.getStringOrThrow('DB_PORT'),
+  host: config.getStringOrThrow('DB_HOST'),
+  ssl: config.isProd()
     ? {
         require: true,
         rejectUnauthorized: false,
