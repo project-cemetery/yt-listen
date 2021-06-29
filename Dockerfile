@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-apk add --no-cache python3 py3-pip
+RUN apk add --no-cache python3 py3-pip
 
 WORKDIR /app
 
