@@ -19,9 +19,10 @@ export class DbOptionsFactory implements TypeOrmOptionsFactory {
       synchronize: false,
       autoLoadEntities: true,
       ssl: this.config.isProd()
-        ? {
+        ? ({
+            require: true,
             rejectUnauthorized: false,
-          }
+          } as any)
         : undefined,
     };
   }
