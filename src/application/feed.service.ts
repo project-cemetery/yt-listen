@@ -33,19 +33,22 @@ export class FeedManager {
     const existItem = await this.resolveByHash(name);
 
     if (existItem) {
+      const feedItem = FeedItem.copyToOtherOwner(existItem, user);
+      await this.em.save(feedItem);
+    } else {
+      const downloaded = await this.downloader.downloadAudios(videoUrl);
+      const uploadedUrl = await this.uploader.upload(downloaded.buffer, name);
+
       const feedItem = new FeedItem(
         uid(),
         name,
-        existItem.url,
+        uploadedUrl,
+        downloaded.title,
+        downloaded.author,
+        downloaded.description,
         user,
         new Date(),
       );
-      await this.em.save(feedItem);
-    } else {
-      const file = await this.downloader.downloadAudios(videoUrl);
-      const uploadedUrl = await this.uploader.upload(file, name);
-
-      const feedItem = new FeedItem(uid(), name, uploadedUrl, user, new Date());
       await this.em.save(feedItem);
     }
   }
