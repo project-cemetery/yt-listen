@@ -27,7 +27,7 @@ workflows:
           path_to_app: PATH_TO_APP
           apply_post_install: true
           post_install_script: 'yarn evolutions -y'
-          container_name: 'yt_listen_app'
+          container_name: 'yt_listen'
           filters:
             tags:
               only: /.*/
