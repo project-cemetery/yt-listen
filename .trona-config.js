@@ -1,6 +1,8 @@
 const { Client } = require('pg');
 
-if (process.env.NODE_ENV !== 'production') {
+const isProd = process.env.NODE_ENV !== 'production';
+
+if (!isProd) {
   require('dotenv').config();
 }
 
@@ -10,6 +12,12 @@ const client = new Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   host: process.env.DB_HOST,
+  ssl: isProd
+    ? {
+        require: true,
+        rejectUnauthorized: false,
+      }
+    : undefined,
 });
 
 client.connect().then(() => {

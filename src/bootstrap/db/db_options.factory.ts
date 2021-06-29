@@ -5,9 +5,7 @@ import { join } from 'path';
 import { Configuration } from '../config/config';
 
 export class DbOptionsFactory implements TypeOrmOptionsFactory {
-  public constructor(
-    @Inject(Configuration) private readonly config: Configuration,
-  ) {}
+  public constructor(private readonly config: Configuration) {}
 
   public createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
@@ -20,6 +18,11 @@ export class DbOptionsFactory implements TypeOrmOptionsFactory {
       entities: [join(__dirname, '../../**/*.{entity}.{ts,js}')],
       synchronize: false,
       autoLoadEntities: true,
+      ssl: this.config.isProd()
+        ? {
+            rejectUnauthorized: false,
+          }
+        : undefined,
     };
   }
 }
