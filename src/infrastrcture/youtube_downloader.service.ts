@@ -17,6 +17,7 @@ export class YouTubeDownloader extends AudioDownloader {
 
     const filename = `${this.outputDirectory}/${response.title}-${response.id}.mp3`;
     const file = await fs.readFile(filename);
+    await fs.unlink(filename);
 
     return file;
   }
