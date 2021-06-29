@@ -32,6 +32,7 @@ export class VideoHandler {
         parse_mode: 'Markdown',
       });
     } catch (e) {
+      console.error(e);
       await ctx.reply('Something went wrong, sorry!');
     }
   }
