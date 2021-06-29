@@ -8,7 +8,8 @@
   "scripts": {
     "build": "nest build",
     "start:dev": "NODE_ENV=development nest start --watch",
-    "start:prod": "node dist/main"
+    "start:prod": "node dist/main",
+    "release": "yarn standard-version"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",
@@ -23,6 +24,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
+    "standard-version": "^9.3.0",
     "typeorm": "^0.2.34",
     "uid": "^2.0.0",
     "youtube-dl-exec": "^1.2.4"
