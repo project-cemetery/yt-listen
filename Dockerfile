@@ -3,6 +3,8 @@ FROM node:14-alpine
 RUN apk add --no-cache python3 py3-pip
 RUN ln -sf python3 /usr/bin/python
 
+RUN apk add  --no-cache ffmpeg
+
 WORKDIR /app
 
 COPY . .
