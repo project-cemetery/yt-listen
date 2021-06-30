@@ -14,11 +14,11 @@ export class YouTubeDownloader extends AudioDownloader {
     const response = await youtubedl(videoUrl, {
       extractAudio: true,
       audioFormat: 'mp3',
-      output: `${this.outputDirectory}/%(title)s-%(id)s.%(ext)s`,
+      output: `${this.outputDirectory}/%(id)s.%(ext)s`,
       printJson: true,
     });
 
-    const filename = `${this.outputDirectory}/${response.title}-${response.id}.mp3`;
+    const filename = `${this.outputDirectory}/${response.id}.mp3`;
     const file = await fs.readFile(filename);
     await fs.unlink(filename);
 
