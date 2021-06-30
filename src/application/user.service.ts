@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { uid } from 'uid';
@@ -14,7 +14,11 @@ export class UserManager {
     private readonly repo: Repository<User>,
   ) {}
 
-  async resolveTelegramUser(telegramId: number): Promise<User> {
+  async resolveTelegramUser(telegramId?: number): Promise<User> {
+    if (!telegramId) {
+      throw new NotFoundException();
+    }
+
     const existUser = await this.repo.findOne({ telegramId });
 
     if (existUser) {
