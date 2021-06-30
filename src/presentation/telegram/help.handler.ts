@@ -12,14 +12,20 @@ export class HelpHandler {
   async start(ctx: Context) {
     const message = this.formatMessage(["I'm YT Listen bot 👋", ...this.HELP]);
 
-    await ctx.reply(message, { parse_mode: 'Markdown' });
+    await ctx.reply(message, {
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true,
+    });
   }
 
   @TelegramActionHandler({ command: '/help' })
   async help(ctx: Context) {
     const message = this.formatMessage(this.HELP);
 
-    await ctx.reply(message, { parse_mode: 'Markdown' });
+    await ctx.reply(message, {
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true,
+    });
   }
 
   private formatMessage(message: string[]): string {
