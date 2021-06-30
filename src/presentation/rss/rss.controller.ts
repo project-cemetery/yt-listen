@@ -37,9 +37,12 @@ export class RssController {
         description: item.description,
         author: item.author,
         date: item.createdAt,
+        enclosure: {
+          url: item.url,
+        },
       });
     });
 
-    return feed.buildXml();
+    return feed.buildXml('  ');
   }
 }
