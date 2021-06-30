@@ -1,14 +1,17 @@
 import { Controller, Get, Header, Param } from '@nestjs/common';
-import { Feed } from 'feed';
+// @ts-ignore
+import Podcast from 'podcast';
 
 import { FeedManager } from 'src/application/feed.service';
 import { UserManager } from 'src/application/user.service';
+import { Configuration } from 'src/bootstrap/config/config';
 
 @Controller()
 export class RssController {
   constructor(
     private readonly feed: FeedManager,
     private readonly users: UserManager,
+    private readonly config: Configuration,
   ) {}
 
   @Get('rss/:userId')
@@ -18,32 +21,25 @@ export class RssController {
     const items = await this.feed.getFeed(user);
     const url = await this.feed.getFeedUrl(user);
 
-    const feed = new Feed({
+    const feed = new Podcast({
       title: 'YT Listen',
       description: 'Personal feed in YT Listen',
-      id: userId,
-      copyright: 'F Society',
-      generator: 'YT Listen',
-      feedLinks: {
-        rss: url,
-      },
+      feedUrl: url,
+      siteUrl: `https://${this.config.getStringOrThrow('PUBLIC_URL')}`,
+      author: 'YT Listen',
     });
 
     items.forEach((item) => {
       feed.addItem({
         title: item.title,
-        id: item.id,
-        link: item.url,
+        guid: item.id,
+        url: item.url,
         description: item.description,
-        author: [
-          {
-            name: item.author,
-          },
-        ],
+        author: item.author,
         date: item.createdAt,
       });
     });
 
-    return feed.rss2();
+    return feed.buildXml();
   }
 }
