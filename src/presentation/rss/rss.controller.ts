@@ -33,7 +33,7 @@ export class RssController {
       feed.addItem({
         title: item.title,
         guid: item.id,
-        url: item.url,
+        url: item.originalUrl,
         description: item.description,
         author: item.author,
         date: item.createdAt,

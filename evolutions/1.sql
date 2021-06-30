@@ -4,14 +4,15 @@ CREATE TABLE public.user (
 );
 
 CREATE TABLE public.feed_item (
-    id          character varying           NOT NULL,
-    url         character varying           NOT NULL,
-    hash        character varying           NOT NULL,
-    author      character varying           NOT NULL,
-    title       character varying           NOT NULL,
-    description character varying           NOT NULL,
-    "createdAt" timestamp without time zone NOT NULL,
-    "ownerId"   character varying
+    id            character varying           NOT NULL,
+    url           character varying           NOT NULL,
+    hash          character varying           NOT NULL,
+    author        character varying           NOT NULL,
+    title         character varying           NOT NULL,
+    description   character varying           NOT NULL,
+    "originalUrl" character varying           NOT NULL,
+    "createdAt"   timestamp without time zone NOT NULL,
+    "ownerId"     character varying
 );
 
 ALTER TABLE ONLY public.user

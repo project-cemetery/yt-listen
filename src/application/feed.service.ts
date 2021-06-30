@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import crypto from 'crypto';
 
 import { Configuration } from 'src/bootstrap/config/config';
 import { FeedItem } from 'src/entity/feed_item.entity';
 import { User } from 'src/entity/user.entity';
-import { EntityManager, Repository } from 'typeorm';
-import { uid } from 'uid';
 
 import { AudioDownloader } from './audio_downloader.service';
 import { FileUploader } from './file_uploader.service';
@@ -32,25 +31,26 @@ export class FeedManager {
 
     const existItem = await this.resolveByHash(name);
 
+    let feedItem: FeedItem;
+
     if (existItem) {
-      const feedItem = FeedItem.copyToOtherOwner(existItem, user);
-      await this.em.save(feedItem);
+      feedItem = FeedItem.copyToOtherOwner(existItem, user);
     } else {
       const downloaded = await this.downloader.downloadAudios(videoUrl);
       const uploadedUrl = await this.uploader.upload(downloaded.buffer, name);
 
-      const feedItem = new FeedItem(
-        uid(),
-        name,
-        uploadedUrl,
-        downloaded.title,
-        downloaded.author,
-        downloaded.description,
-        user,
-        new Date(),
-      );
-      await this.em.save(feedItem);
+      feedItem = FeedItem.new({
+        hash: name,
+        url: uploadedUrl,
+        title: downloaded.title,
+        description: downloaded.description,
+        author: downloaded.author,
+        originalUrl: videoUrl,
+        owner: user,
+      });
     }
+
+    await this.em.save(feedItem);
   }
 
   async getFeedUrl(user: User): Promise<string> {

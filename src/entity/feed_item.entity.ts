@@ -21,6 +21,9 @@ export class FeedItem {
   readonly author: string;
 
   @Column()
+  readonly originalUrl: string;
+
+  @Column()
   readonly description: string;
 
   @ManyToOne((type) => User)
@@ -36,6 +39,7 @@ export class FeedItem {
     title: string,
     author: string,
     description: string,
+    originalUrl: string,
     owner: User,
     createdAt: Date,
   ) {
@@ -45,8 +49,39 @@ export class FeedItem {
     this.title = title;
     this.author = author;
     this.description = description;
+    this.originalUrl = originalUrl;
     this.owner = owner;
     this.createdAt = createdAt;
+  }
+
+  static new({
+    hash,
+    url,
+    title,
+    author,
+    description,
+    originalUrl,
+    owner,
+  }: {
+    hash: string;
+    url: string;
+    title: string;
+    author: string;
+    description: string;
+    originalUrl: string;
+    owner: User;
+  }) {
+    return new FeedItem(
+      uid(),
+      hash,
+      url,
+      title,
+      author,
+      description,
+      originalUrl,
+      owner,
+      new Date(),
+    );
   }
 
   static copyToOtherOwner(otherItem: FeedItem, owner: User) {
@@ -57,6 +92,7 @@ export class FeedItem {
       otherItem.title,
       otherItem.author,
       otherItem.description,
+      otherItem.originalUrl,
       owner,
       new Date(),
     );
