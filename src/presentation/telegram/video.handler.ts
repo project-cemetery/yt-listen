@@ -30,7 +30,8 @@ export class VideoHandler {
       await this.feed.addVideoToFeed(url, user);
       const feedUrl = await this.feed.getFeedUrl(user);
 
-      await ctx.reply(`Done! Feed \`${feedUrl}\` has beed updated`, {
+      await ctx.reply('Done! Your private deed has beed updated 👇');
+      await ctx.reply(`\`${feedUrl}\``, {
         parse_mode: 'Markdown',
       });
     } catch (e) {
