@@ -54,7 +54,7 @@ export class FeedManager {
   }
 
   async getFeedUrl(user: User): Promise<string> {
-    return `rss://${this.siteUrl}/feed/${user.id}`;
+    return `https://${this.siteUrl}/feed/${user.id}`;
   }
 
   async getFeed(user: User): Promise<Array<FeedItem>> {
