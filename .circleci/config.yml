@@ -18,7 +18,7 @@ workflows:
             tags:
               only: /.*/
       - deploy/roll_out:
-          notify_user: '65400792'
+          notify_user: '-503950977'
           ssh_user: SSH_USER
           ssh_host: SSH_HOST
           org_name: 'igorkamyshev'
