@@ -24,6 +24,8 @@ export class VideoHandler {
 
     await ctx.reply(`Please, wait`);
 
+    // TODO: make queue???
+
     try {
       await this.feed.addVideoToFeed(url, user);
       const feedUrl = await this.feed.getFeedUrl(user);

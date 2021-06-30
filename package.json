@@ -19,6 +19,7 @@
     "@solid-soda/config": "^2.2.0",
     "@solid-soda/evolutions": "^0.1.2",
     "aws-sdk": "^2.936.0",
+    "feed": "^4.2.2",
     "nest-telegram": "^0.6.10",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
