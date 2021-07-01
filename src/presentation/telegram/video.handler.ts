@@ -25,7 +25,10 @@ export class VideoHandler {
 
     const user = await this.users.resolveTelegramUser(telegramId);
 
-    await this.analyst.logEvent(user, 'video_processing_start', { url });
+    await this.analyst.logEvent(user, 'video_processing_start', {
+      url,
+      message: msg ?? '',
+    });
 
     await ctx.reply(`Please, wait a minute...`);
 
