@@ -21,12 +21,16 @@ export class RssController {
     const items = await this.feed.getFeed(user);
     const url = await this.feed.getFeedUrl(user);
 
+    const siteUrl = `https://${this.config.getStringOrThrow('PUBLIC_URL')}`;
+
     const feed = new Podcast({
       title: 'YT Listen',
       description: 'Personal feed in YT Listen',
       feedUrl: url,
-      siteUrl: `https://${this.config.getStringOrThrow('PUBLIC_URL')}`,
+      siteUrl,
       author: 'YT Listen',
+      imageUrl: `${siteUrl}/static/feed_cover.jpeg`,
+      ttl: 5,
     });
 
     items.forEach((item) => {

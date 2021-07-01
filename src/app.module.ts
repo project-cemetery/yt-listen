@@ -1,7 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TelegramBot, TelegramModule } from 'nest-telegram';
+import { join } from 'path';
 
 import { AudioDownloader } from './application/audio_downloader.service';
 import { FeedManager } from './application/feed.service';
@@ -21,6 +23,10 @@ import { VideoHandler } from './presentation/telegram/video.handler';
 @Module({
   imports: [
     ConfigModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+      serveRoot: '/static',
+    }),
     TelegramModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TelegramOptionsFactory,
