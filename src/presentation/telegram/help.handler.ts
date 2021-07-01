@@ -23,7 +23,7 @@ export class HelpHandler {
     await ctx.reply(
       this.formatMessage([
         "I'm YT Listen bot 👋",
-        'I provide simple way to listen any YouTube-video in podcast-app as a regular podcast.',
+        'I provide a simple way to listen to any YouTube video in podcast-app as a regular podcast.',
       ]),
     );
     await this.sendHelp(user, ctx, { shouldPin: true });
@@ -47,7 +47,7 @@ export class HelpHandler {
 
     await ctx.replyWithMarkdown(
       this.formatMessage([
-        "Send me any YouTube-video, and I'll create a personal RSS feed for you, download the video, convert it to audio and put in the feed.",
+        "Send me any YouTube video, and I'll create a personal RSS feed for you, download the video, convert it to audio, and put it in the feed.",
         'Your private RSS link 👇',
       ]),
     );
