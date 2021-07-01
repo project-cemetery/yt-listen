@@ -14,9 +14,12 @@ export class HelpHandler {
 
   @TelegramActionHandler({ onStart: true })
   async start(ctx: Context) {
-    const user = await this.users.resolveTelegramUser(ctx.from?.id);
-    const help = await this.getHelp(user);
-    const message = this.formatMessage(["I'm YT Listen bot 👋", ...help]);
+    const defaultHelp = this.getDefaultHelp();
+    const message = this.formatMessage([
+      "I'm YT Listen bot 👋",
+      ...defaultHelp,
+      'Use /help for more info',
+    ]);
 
     await ctx.reply(message, {
       parse_mode: 'Markdown',
@@ -26,22 +29,51 @@ export class HelpHandler {
 
   @TelegramActionHandler({ command: '/help' })
   async help(ctx: Context) {
-    const user = await this.users.resolveTelegramUser(ctx.from?.id);
-    const help = await this.getHelp(user);
-    const message = this.formatMessage(help);
+    const defaulthelp = this.getDefaultHelp();
+    const message = this.formatMessage([
+      ...defaulthelp,
+      'To find out how to add a private feed to your favorite podcast app, click the button below 👇',
+    ]);
 
     await ctx.reply(message, {
       parse_mode: 'Markdown',
       disable_web_page_preview: true,
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: 'Apple Podcasts',
+              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#podcasts',
+            },
+          ],
+          [
+            {
+              text: 'Overcast',
+              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#overcast',
+            },
+            {
+              text: 'Pocket Casts',
+              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#pocketcasts',
+            },
+          ],
+          [
+            {
+              text: 'Castro',
+              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#castro',
+            },
+            {
+              text: 'Google Podcasts',
+              url: 'https://twitter.com/GabeBender/status/1334593474688126979',
+            },
+          ],
+        ],
+      },
     });
   }
 
-  private async getHelp(user: User) {
-    const feedLink = await this.feed.getFeedLink(user);
-
+  private getDefaultHelp() {
     return [
       "Send me any YouTube-video, and I'll create a personal RSS feed for you, download the video, convert it to audio and put in the feed.",
-      `Personal RSS-feed can be used in any podcast-application ([Apple Podcasts](https://support.patreon.com/hc/en-us/articles/115000877506-Add-my-private-RSS-feed-to-the-Apple-Podcast-app), [Pocket Casts](pktc://subscribe/${feedLink}), Overcast, etc.).`,
     ];
   }
 
