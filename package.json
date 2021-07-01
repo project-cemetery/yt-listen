@@ -12,6 +12,7 @@
     "release": "yarn standard-version"
   },
   "dependencies": {
+    "@amplitude/node": "^1.7.0",
     "@nestjs/common": "^7.6.13",
     "@nestjs/core": "^7.6.13",
     "@nestjs/platform-express": "^7.6.13",

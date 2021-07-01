@@ -4,6 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { uid } from 'uid';
 
 import { User } from 'src/entity/user.entity';
+import { Analyst } from './analyst.service';
 
 @Injectable()
 export class UserManager {
@@ -12,6 +13,7 @@ export class UserManager {
     private readonly em: EntityManager,
     @InjectRepository(User)
     private readonly repo: Repository<User>,
+    private readonly analyst: Analyst,
   ) {}
 
   async resolveTelegramUser(telegramId?: number): Promise<User> {
@@ -28,6 +30,7 @@ export class UserManager {
     const newUser = new User(uid(), telegramId);
 
     await this.em.save(newUser);
+    await this.analyst.logEvent(newUser, 'user_created');
 
     return newUser;
   }

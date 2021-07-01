@@ -9,6 +9,7 @@ import { User } from 'src/entity/user.entity';
 
 import { AudioDownloader } from './audio_downloader.service';
 import { FileUploader } from './file_uploader.service';
+import { Analyst } from './analyst.service';
 
 @Injectable()
 export class FeedManager {
@@ -21,6 +22,7 @@ export class FeedManager {
     private readonly em: EntityManager,
     @InjectRepository(FeedItem)
     private readonly repo: Repository<FeedItem>,
+    private readonly analyst: Analyst,
     config: Configuration,
   ) {
     this.siteUrl = config.getStringOrThrow('PUBLIC_URL');
@@ -35,6 +37,7 @@ export class FeedManager {
 
     if (existItem) {
       feedItem = FeedItem.copyToOtherOwner(existItem, user);
+      await this.analyst.logEvent(user, 'exist_video_added');
     } else {
       const downloaded = await this.downloader.downloadAudios(videoUrl);
       const uploadedUrl = await this.uploader.upload(downloaded.buffer, name);
@@ -48,6 +51,7 @@ export class FeedManager {
         originalUrl: videoUrl,
         owner: user,
       });
+      await this.analyst.logEvent(user, 'new_video_added');
     }
 
     await this.em.save(feedItem);

@@ -1,34 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { Context, TelegramActionHandler } from 'nest-telegram';
 
+import { Analyst } from 'src/application/analyst.service';
 import { FeedManager } from 'src/application/feed.service';
 import { UserManager } from 'src/application/user.service';
+import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class HelpHandler {
   constructor(
     private readonly feed: FeedManager,
     private readonly users: UserManager,
+    private readonly analyst: Analyst,
   ) {}
 
   @TelegramActionHandler({ onStart: true })
   async start(ctx: Context) {
+    const user = await this.users.resolveTelegramUser(ctx.from?.id);
+
+    await this.analyst.logEvent(user, 'bot_started');
+
     await ctx.reply(
       this.formatMessage([
         "I'm YT Listen bot 👋",
         'I provide simple way to listen any YouTube-video in podcast-app as a regular podcast.',
       ]),
     );
-    await this.sendHelp(ctx, { shouldPin: true });
+    await this.sendHelp(user, ctx, { shouldPin: true });
   }
 
   @TelegramActionHandler({ command: '/help' })
   async help(ctx: Context) {
-    await this.sendHelp(ctx, { shouldPin: false });
+    const user = await this.users.resolveTelegramUser(ctx.from?.id);
+
+    await this.analyst.logEvent(user, 'bot_help_requested');
+
+    await this.sendHelp(user, ctx, { shouldPin: false });
   }
 
-  async sendHelp(ctx: Context, { shouldPin }: { shouldPin: boolean }) {
-    const user = await this.users.resolveTelegramUser(ctx.from?.id);
+  async sendHelp(
+    user: User,
+    ctx: Context,
+    { shouldPin }: { shouldPin: boolean },
+  ) {
     const feedUrl = await this.feed.getFeedUrl(user);
 
     await ctx.replyWithMarkdown(
