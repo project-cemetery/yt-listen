@@ -16,6 +16,7 @@ export class YouTubeDownloader extends AudioDownloader {
       audioFormat: 'mp3',
       output: `${this.outputDirectory}/%(id)s.%(ext)s`,
       printJson: true,
+      noPlaylist: true,
     });
 
     const filename = `${this.outputDirectory}/${response.id}.mp3`;
