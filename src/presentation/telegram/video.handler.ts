@@ -14,7 +14,7 @@ export class VideoHandler {
   @TelegramActionHandler({ message: new RegExp('https://', 'gi') })
   async video(ctx: Context) {
     const msg = ctx.message?.text;
-    const url = msg?.match(/https:\/\/\S+/i)?.[0]
+    const url = msg?.match(/https:\/\/\S+/i)?.[0];
     const telegramId = ctx.from?.id;
 
     if (!url || !telegramId) {
