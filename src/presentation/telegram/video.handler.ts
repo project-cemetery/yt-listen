@@ -23,21 +23,17 @@ export class VideoHandler {
 
     const user = await this.users.resolveTelegramUser(telegramId);
 
-    await ctx.reply(`Please, wait`);
+    await ctx.reply(`Please, wait a minute...`);
 
     // TODO: make queue???
 
     try {
       await this.feed.addVideoToFeed(url, user);
-      const feedUrl = await this.feed.getFeedUrl(user);
 
-      await ctx.reply('Done! Your private been has been updated 👇');
-      await ctx.reply(`\`${feedUrl}\``, {
-        parse_mode: 'Markdown',
-      });
+      await ctx.reply('Done! Your private been has been updated 🤗');
     } catch (e) {
       console.error(e);
-      await ctx.reply('Something went wrong, sorry!');
+      await ctx.reply('Something went wrong, sorry 😭');
     }
   }
 }

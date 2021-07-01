@@ -3,7 +3,6 @@ import { Context, TelegramActionHandler } from 'nest-telegram';
 
 import { FeedManager } from 'src/application/feed.service';
 import { UserManager } from 'src/application/user.service';
-import { User } from 'src/entity/user.entity';
 
 @Injectable()
 export class HelpHandler {
@@ -14,67 +13,73 @@ export class HelpHandler {
 
   @TelegramActionHandler({ onStart: true })
   async start(ctx: Context) {
-    const defaultHelp = this.getDefaultHelp();
-    const message = this.formatMessage([
-      "I'm YT Listen bot 👋",
-      ...defaultHelp,
-      'Use /help for more info',
-    ]);
-
-    await ctx.reply(message, {
-      parse_mode: 'Markdown',
-      disable_web_page_preview: true,
-    });
+    await ctx.reply(
+      this.formatMessage([
+        "I'm YT Listen bot 👋",
+        'I provide simple way to listen any YouTube-video in podcast-app as a regular podcast.',
+      ]),
+    );
+    await this.sendHelp(ctx, { shouldPin: true });
   }
 
   @TelegramActionHandler({ command: '/help' })
   async help(ctx: Context) {
-    const defaulthelp = this.getDefaultHelp();
-    const message = this.formatMessage([
-      ...defaulthelp,
-      'To find out how to add a private feed to your favorite podcast app, click the button below 👇',
-    ]);
-
-    await ctx.reply(message, {
-      parse_mode: 'Markdown',
-      disable_web_page_preview: true,
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: 'Apple Podcasts',
-              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#podcasts',
-            },
-          ],
-          [
-            {
-              text: 'Overcast',
-              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#overcast',
-            },
-            {
-              text: 'Pocket Casts',
-              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#pocketcasts',
-            },
-          ],
-          [
-            {
-              text: 'Castro',
-              url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#castro',
-            },
-            {
-              text: 'Google Podcasts',
-              url: 'https://twitter.com/GabeBender/status/1334593474688126979',
-            },
-          ],
-        ],
-      },
-    });
+    await this.sendHelp(ctx, { shouldPin: false });
   }
 
-  private getDefaultHelp() {
-    return [
-      "Send me any YouTube-video, and I'll create a personal RSS feed for you, download the video, convert it to audio and put in the feed.",
-    ];
+  async sendHelp(ctx: Context, { shouldPin }: { shouldPin: boolean }) {
+    const user = await this.users.resolveTelegramUser(ctx.from?.id);
+    const feedUrl = await this.feed.getFeedUrl(user);
+
+    await ctx.replyWithMarkdown(
+      this.formatMessage([
+        "Send me any YouTube-video, and I'll create a personal RSS feed for you, download the video, convert it to audio and put in the feed.",
+        'Your private RSS link 👇',
+      ]),
+    );
+
+    const feedSentMessage = await ctx.replyWithMarkdown(`\`${feedUrl}\``);
+    if (shouldPin) {
+      await ctx.pinChatMessage(feedSentMessage.message_id, {
+        disable_notification: true,
+      });
+    }
+
+    await ctx.replyWithMarkdown(
+      'To find out how to add a private feed to your favorite podcast app, click the button below 👇',
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: 'Apple Podcasts',
+                url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#podcasts',
+              },
+            ],
+            [
+              {
+                text: 'Overcast',
+                url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#overcast',
+              },
+              {
+                text: 'Pocket Casts',
+                url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#pocketcasts',
+              },
+            ],
+            [
+              {
+                text: 'Castro',
+                url: 'https://www.imore.com/how-manually-add-podcasts-apple-podcasts#castro',
+              },
+              {
+                text: 'Google Podcasts',
+                url: 'https://twitter.com/GabeBender/status/1334593474688126979',
+              },
+            ],
+          ],
+        },
+      },
+    );
   }
 
   private formatMessage(message: string[]): string {
