@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Context, TelegramActionHandler } from 'nest-telegram';
 
 import { Analyst } from 'src/application/analyst.service';
 import { FeedManager } from 'src/application/feed.service';
+import { IlligalActionError } from 'src/application/illegal_action.error';
+import { UrlClassifier } from 'src/application/url_classifier.service';
 import { UserManager } from 'src/application/user.service';
 
 @Injectable()
@@ -11,23 +13,29 @@ export class VideoHandler {
     private readonly users: UserManager,
     private readonly feed: FeedManager,
     private readonly analyst: Analyst,
+    private readonly urls: UrlClassifier,
   ) {}
 
   @TelegramActionHandler({ message: new RegExp('https://', 'gi') })
   async video(ctx: Context) {
-    const msg = ctx.message?.text;
-    const url = msg?.match(/https:\/\/\S+/i)?.[0];
-    const telegramId = ctx.from?.id;
+    const url = this.urls.extract(ctx.message?.text);
 
-    if (!url || !telegramId) {
-      throw new Error('Something wrong');
+    if (!url) {
+      throw new BadRequestException('I can not find url in this message');
     }
 
-    const user = await this.users.resolveTelegramUser(telegramId);
+    const urlType = this.urls.whatIsIt(url);
+
+    const user = await this.users.resolveTelegramUser(ctx.from?.id);
+
+    const canUserDoThisAction = await this.users.canUse(user, urlType);
+    if (!canUserDoThisAction) {
+      throw new IlligalActionError(url, urlType);
+    }
 
     await this.analyst.logEvent(user, 'video_processing_start', {
       url,
-      message: msg ?? '',
+      message: ctx.message?.text ?? '',
     });
 
     await ctx.reply(`Please, wait a minute...`);

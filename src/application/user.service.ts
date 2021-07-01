@@ -5,6 +5,7 @@ import { uid } from 'uid';
 
 import { User } from 'src/entity/user.entity';
 import { Analyst } from './analyst.service';
+import { UrlType } from './url_classifier.service';
 
 @Injectable()
 export class UserManager {
@@ -16,9 +17,14 @@ export class UserManager {
     private readonly analyst: Analyst,
   ) {}
 
+  async canUse(user: User, url: UrlType): Promise<boolean> {
+    // TODO: Change it after payment feature
+    return url === UrlType.Video;
+  }
+
   async resolveTelegramUser(telegramId?: number): Promise<User> {
     if (!telegramId) {
-      throw new NotFoundException();
+      throw new NotFoundException('User not found');
     }
 
     const existUser = await this.repo.findOne({ telegramId });
@@ -36,6 +42,12 @@ export class UserManager {
   }
 
   async getUser(id: string): Promise<User> {
-    return this.repo.findOneOrFail(id);
+    const user = await this.repo.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 }
