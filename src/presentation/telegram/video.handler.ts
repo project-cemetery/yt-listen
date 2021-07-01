@@ -39,7 +39,7 @@ export class VideoHandler {
 
       await this.analyst.logEvent(user, 'video_processing_done', { url });
 
-      await ctx.reply('Done! Your private been has been updated 🤗');
+      await ctx.reply('Done! Your private feed has been updated 🤗');
     } catch (e) {
       console.error(e);
       await this.analyst.logEvent(user, 'video_processing_fail', {
