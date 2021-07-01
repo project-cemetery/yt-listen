@@ -4,6 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TelegramBot, TelegramModule } from 'nest-telegram';
 import { join } from 'path';
+import { Analyst } from './application/analyst.service';
 
 import { AudioDownloader } from './application/audio_downloader.service';
 import { FeedManager } from './application/feed.service';
@@ -44,6 +45,7 @@ import { VideoHandler } from './presentation/telegram/video.handler';
     VideoHandler,
     FeedManager,
     UserManager,
+    Analyst,
     { provide: FileUploader, useClass: DigitalOceanSpacesUploader },
     { provide: AudioDownloader, useClass: YouTubeDownloader },
   ],

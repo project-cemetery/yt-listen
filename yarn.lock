@@ -2,6 +2,38 @@
 # yarn lockfile v1
 
 
+"@amplitude/identify@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/identify/-/identify-1.7.0.tgz#ea8e435d55e55027ced0abfe1a5e250038e75f6c"
+  integrity sha512-AhaYj76cExvABu2C2Q6oO4aRNQhQkP7foQb7Lk7qW5ZPhdiWpAOGThdMre0pu5CSYF21G+FUnM6/1WQ5Cfkw3A==
+  dependencies:
+    "@amplitude/types" "^1.7.0"
+    "@amplitude/utils" "^1.7.0"
+    tslib "^1.9.3"
+
+"@amplitude/node@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/node/-/node-1.7.0.tgz#534745e79a621ef74b1153c19c5683559ff930ac"
+  integrity sha512-+2z0V+3fVbSihbJipADvFPb2bDCLvpgDnzLkNUka606DTyLWPuoDKzawUgl2yanuFXowFYEmQ2EltuQHoXd3YQ==
+  dependencies:
+    "@amplitude/identify" "^1.7.0"
+    "@amplitude/types" "^1.7.0"
+    "@amplitude/utils" "^1.7.0"
+    tslib "^1.9.3"
+
+"@amplitude/types@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.7.0.tgz#c9f6636245f2de0ab58ee667b442cef58c42c453"
+  integrity sha512-zPENZDWlh64WHj/7Jjghu2HGWywMPundf25ycxn0tYXtxTvPmK2m/MMV6GvUN5uW0kg65eeKETCfge1UJ9MXlQ==
+
+"@amplitude/utils@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/utils/-/utils-1.7.0.tgz#91ef07f203223ad4f5309f0c8950ebb5de6bd8eb"
+  integrity sha512-+WsKdFbA+rR/xSTlho90C+GlzDL7Sn51J4bmmGtOSTZk5oEPohvHzHO8pVBGDB8UvNAs2LjQQ7q7b2qRWdUtvA==
+  dependencies:
+    "@amplitude/types" "^1.7.0"
+    tslib "^1.9.3"
+
 "@angular-devkit/core@11.2.4":
   version "11.2.4"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-11.2.4.tgz#4404b86d8dbdb41a0e3f94cb08ff8604e0c49a2e"
@@ -4740,7 +4772,7 @@ tslib@2.2.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
   integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
 
-tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
