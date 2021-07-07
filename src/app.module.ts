@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BullModule } from '@nestjs/bull';
 import { TelegramBot, TelegramModule } from 'nest-telegram';
 import { join } from 'path';
 
@@ -24,6 +25,9 @@ import { HelpHandler } from './presentation/telegram/help.handler';
 import { IlligalActionCatcher } from './presentation/telegram/illegal_action.catcher';
 import { NotFoundCatcher } from './presentation/telegram/not_found.catcher';
 import { VideoHandler } from './presentation/telegram/video.handler';
+import { QueueOptionsFactory } from './bootstrap/queue/queue.factory';
+import { VIDEO_QUEUE } from './presentation/constants/queue';
+import { VideoConsumer } from './presentation/queue/video.consumer';
 
 @Module({
   imports: [
@@ -31,6 +35,13 @@ import { VideoHandler } from './presentation/telegram/video.handler';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'static'),
       serveRoot: '/static',
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: QueueOptionsFactory,
+    }),
+    BullModule.registerQueue({
+      name: VIDEO_QUEUE,
     }),
     TelegramModule.forRootAsync({
       imports: [ConfigModule],
@@ -54,6 +65,7 @@ import { VideoHandler } from './presentation/telegram/video.handler';
     BadRequestCatcher,
     NotFoundCatcher,
     IlligalActionCatcher,
+    VideoConsumer,
     { provide: FileUploader, useClass: DigitalOceanSpacesUploader },
     { provide: AudioDownloader, useClass: YouTubeDownloader },
   ],
