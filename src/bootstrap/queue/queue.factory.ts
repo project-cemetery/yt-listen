@@ -14,6 +14,10 @@ export class QueueOptionsFactory implements SharedBullConfigurationFactory {
     const username = this.config.getStringOrElse('REDIS_USER', '');
     const password = this.config.getStringOrElse('REDIS_PASSWORD', '');
 
-    return { redis: { host, port, username, password } };
+    const prefix = this.config.isProd() ? 'rediss' : 'redis';
+
+    return {
+      redis: `${prefix}://${username}:${password}@${host}:${port}/`,
+    };
   }
 }
