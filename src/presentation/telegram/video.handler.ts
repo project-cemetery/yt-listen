@@ -1,4 +1,6 @@
+import { InjectQueue } from '@nestjs/bull';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Queue } from 'bull';
 import { Context, TelegramActionHandler } from 'nest-telegram';
 
 import { Analyst } from 'src/application/analyst.service';
@@ -6,6 +8,8 @@ import { FeedManager } from 'src/application/feed.service';
 import { IlligalActionError } from 'src/application/illegal_action.error';
 import { UrlClassifier } from 'src/application/url_classifier.service';
 import { UserManager } from 'src/application/user.service';
+import { VIDEO_QUEUE } from '../constants/queue';
+import { VideoRequest } from '../dto/video_request.dto';
 
 @Injectable()
 export class VideoHandler {
@@ -14,6 +18,8 @@ export class VideoHandler {
     private readonly feed: FeedManager,
     private readonly analyst: Analyst,
     private readonly urls: UrlClassifier,
+    @InjectQueue(VIDEO_QUEUE)
+    private readonly videoQueue: Queue<VideoRequest>,
   ) {}
 
   @TelegramActionHandler({ message: new RegExp('https://', 'gi') })
@@ -38,23 +44,8 @@ export class VideoHandler {
       message: ctx.message?.text ?? '',
     });
 
+    await this.videoQueue.add({ userId: user.id, url });
+
     await ctx.reply(`Please, wait a minute...`);
-
-    // TODO: make queue???
-
-    try {
-      await this.feed.addVideoToFeed(url, user);
-
-      await this.analyst.logEvent(user, 'video_processing_done', { url });
-
-      await ctx.reply('Done! Your private feed has been updated 🤗');
-    } catch (e) {
-      console.error(e);
-      await this.analyst.logEvent(user, 'video_processing_fail', {
-        url,
-        error: e.message,
-      });
-      await ctx.reply('Something went wrong, sorry 😭');
-    }
   }
 }
