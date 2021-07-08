@@ -8,7 +8,7 @@ import { User } from 'src/entity/user.entity';
 export class Analyst {
   private readonly analytics: Amplitude.NodeClient;
 
-  constructor(config: Configuration) {
+  constructor(private readonly config: Configuration) {
     this.analytics = Amplitude.init(config.getStringOrThrow('AMPLITUDE_KEY'));
   }
 
@@ -17,6 +17,10 @@ export class Analyst {
     eventType: string,
     props: Record<string, number | string | boolean> = {},
   ) {
+    if (this.config.isDev()) {
+      return;
+    }
+
     await this.analytics.logEvent({
       event_type: eventType,
       user_id: user.id,
