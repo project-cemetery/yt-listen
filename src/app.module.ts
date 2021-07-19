@@ -28,6 +28,7 @@ import { VideoHandler } from './presentation/telegram/video.handler';
 import { QueueOptionsFactory } from './bootstrap/queue/queue.factory';
 import { VIDEO_QUEUE } from './presentation/constants/queue';
 import { VideoConsumer } from './presentation/queue/video.consumer';
+import { HealthController } from './presentation/health/health.controller';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import { VideoConsumer } from './presentation/queue/video.consumer';
     TypeOrmModule.forFeature([FeedItem]),
     TypeOrmModule.forFeature([User]),
   ],
-  controllers: [RssController],
+  controllers: [RssController, HealthController],
   providers: [
     HelpHandler,
     VideoHandler,
