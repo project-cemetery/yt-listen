@@ -434,6 +434,11 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/podcast@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@types/podcast/-/podcast-1.3.1.tgz#0fb5547061d876e4ba34ffe8747da8ee50372455"
+  integrity sha512-V0BMC+AG7R8uXM43huMRSDtYD8OZT/0tdsMmJaUaMa43ggRjiA04VH9iwKfvyKfBohPK6wHDWRK7VUTGxMcO7A==
+
 "@types/qs@*":
   version "6.9.6"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.6.tgz#df9c3c8b31a247ec315e6996566be3171df4b3b1"

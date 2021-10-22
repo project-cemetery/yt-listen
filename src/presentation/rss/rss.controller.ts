@@ -1,5 +1,4 @@
 import { Controller, Get, Header, Param } from '@nestjs/common';
-// @ts-ignore
 import Podcast from 'podcast';
 import { Analyst } from 'src/application/analyst.service';
 
