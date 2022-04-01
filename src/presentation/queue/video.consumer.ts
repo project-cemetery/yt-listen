@@ -38,7 +38,7 @@ export class VideoConsumer {
 
       await this.analyst.logEvent(user, 'video_processing_fail', {
         url,
-        error: e.message,
+        error: (e as any).message,
       });
 
       await this.bot.telegrafBot.telegram.sendMessage(
